@@ -6,3 +6,7 @@ Dockerfile
 .env.example
 .git
 .gitignore
+
+# Created from applicaiton runtime
+application.log
+Last-Known-IP.log
