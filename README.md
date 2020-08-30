@@ -45,7 +45,7 @@ Environment variables are required to run the process as standalone Node.js proc
 * `SEND_EMAIL_SES` - `boolean` - Use AWS SES to send notification email. ex: true. NOTE: there is a known issue where setting value to false will not suppress emails.  If you really don't want emails there is a workaround outlined in [Issue #8](https://github.com/sjmayotte/route53-dynamic-dns/issues/8)
 * `SES_TO_ADDRESS` - `string` - If SEND_EMAIL_SES = true, 'To' address for email; ex: "admin@example.com"
 * `SES_FROM_ADDRESS` - `string` - If SEND_EMAIL_SES = true, 'From' address for email; ex: "notification@example.com"
-* `UPDATE_FREQUENCY` - `integer` - Interval in Milliseconds to check if Public IP has changed; ex: 60000 (which is every minute)
+* `UPDATE_FREQUENCY` - `integer` - Interval in milliseconds to check if Public IP has changed; ex: 60000 (which is every minute)
 * `IPCHECKER` - `string` - Public IP checker service. 'opendns' or 'ifconfig.co'. Defaults to opendns.
 
 # Minimum AWS IAM Policy
@@ -247,18 +247,17 @@ The Node.js process writes useful data to log files.  See [Logs](#logs) section 
 
 # Logs
 ## `STDOUT`
-When Node.js process starts it writes useful data to `STDOUT`.  Example output:
+When Node.js process starts it writes to `STDOUT`. When run in a container, STDOUT is used for logging, otherwise, logs are written to `application.log`.  
+
+Example output:
 ```
 Log4js initialized with level INFO 
 
 Logs located in application.log in working directory
-
-If running in Docker Container use the following command to access a shell:
-   docker exec -it [container_id] sh
 ```
 
 ## `application.log`
-Application logs are written to `application.log` in root project directory.  Log files are compressed and archived after reaching 10MB in size.  The most recent 3 archives are kept in rotation.  All other archives are deleted to keep footprint small.
+When not run in a container, application logs are written to `application.log` in root project directory.  Log files are compressed and archived after reaching 10MB in size.  The most recent 3 archives are kept in rotation.  All other archives are deleted to keep footprint small.
 
 # Issues
 If you run into any issues, check to make sure all variables are set properly in `.env` or passed properly into Docker Container at runtime.  If you are sure your environment variables are correct, please open an [issue](https://github.com/sjmayotte/route53-dynamic-dns/issues) and provide as much detail as possible.
